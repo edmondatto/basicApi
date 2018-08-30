@@ -1,7 +1,13 @@
 module.exports = function(app, db) {
   app.post('/notes', (req, res) => {
-    console.log(req.body);
-    console.log(req.title);
-    res.send('I\'m live')
+    const newNote = { title: req.body.title, text: req.body.body };
+
+    db.collection('notes').insert(newNote, (err, result) => {
+      if (err) {
+        res.send({'error': 'An error has occurred'});
+      } else {
+        res.send(result.ops[0])
+      }
+    });
   });
 };
